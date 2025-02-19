@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@source "../src/app.html";
 
 @theme {
   --font-sans: "Inter Variable", sans-serif;
