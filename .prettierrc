@@ -7,6 +7,12 @@
       "options": {
         "parser": "svelte"
       }
+    },
+    {
+      "files": "wrangler.jsonc",
+      "options": {
+        "trailingComma": "none"
+      }
     }
   ]
 }
