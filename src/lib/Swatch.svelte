@@ -3,6 +3,10 @@
   import { oklch, formatHex, formatCss } from "culori";
   import { COLORS } from "./colors";
 
+  import { ClipboardCheck } from "@lucide/svelte";
+  import { scale } from "svelte/transition";
+  import { cubicInOut } from "svelte/easing";
+
   interface Props {
     colorVar: string;
     displayMode: string;
@@ -22,20 +26,35 @@
 
   const textColorVar = $derived(`--color-${colorName}-${luminance < 0.69 ? 50 : 950}`);
 
+  let showCopied = $state(false);
+  let showCopiedTimeout: ReturnType<typeof setTimeout> | undefined;
+
   async function copyToClipboard(color: string) {
     try {
       await navigator.clipboard.writeText(color);
-      console.log("Content copied to clipboard");
+
+      if (showCopiedTimeout !== undefined) {
+        clearTimeout(showCopiedTimeout);
+        showCopiedTimeout = undefined;
+      }
+
+      showCopied = true;
+      showCopiedTimeout = setTimeout(() => {
+        showCopied = false;
+        showCopiedTimeout = undefined;
+      }, 1500);
     } catch (err) {
       console.error("Failed to copy: ", err);
     }
   }
+
+  let transitionInProgress = $state(false);
 </script>
 
 {#if colorHex !== undefined}
   <button
     class={twMerge(
-      "group relative cursor-pointer rounded ring-blue-500 ring-offset-2 ring-offset-zinc-950 transition-transform outline-none focus-visible:ring-2",
+      "group cursor-pointer rounded ring-blue-500 ring-offset-2 ring-offset-neutral-900 transition-transform outline-none focus-visible:ring-2",
       !showCode && "active:scale-95",
     )}
     onclick={() => {
@@ -48,7 +67,7 @@
   >
     <div
       class={twMerge(
-        "swatch h-8 w-full rounded border font-mono",
+        "swatch h-9 w-full rounded border font-mono",
         "flex items-center justify-center px-2",
         showCode && "min-w-20",
       )}
@@ -60,7 +79,18 @@
         <span
           class="font-mono text-xs font-medium text-current/90 shadow-current transition-all duration-75 group-active:scale-95 group-active:font-bold"
         >
-          {#if showCode}
+          {#if showCopied}
+            <div
+              class=""
+              transition:scale={{ duration: 150, easing: cubicInOut }}
+              onintrostart={() => (transitionInProgress = true)}
+              onintroend={() => (transitionInProgress = false)}
+              onoutrostart={() => (transitionInProgress = true)}
+              onoutroend={() => (transitionInProgress = false)}
+            >
+              <ClipboardCheck class="size-5" />
+            </div>
+          {:else if showCode && !transitionInProgress}
             {#if displayMode === "oklch"}
               {colorOklch.l}
               {colorOklch.c}
@@ -72,8 +102,8 @@
         </span>
       {/if}
     </div>
-    <div class="mt-0.25 flex w-full flex-col items-start justify-center">
-      <span class="text-tiny -mb-1 text-gray-400">{colorId}</span>
+    <div class="mt-0.5 flex w-full flex-col items-start justify-center">
+      <span class="text-xs tracking-wide text-neutral-400">{colorId}</span>
     </div>
   </button>
 {/if}
