@@ -36,11 +36,13 @@
 >
   <div>
     <h1 class="mb-2 text-xl font-bold">Tailwind Colors Reference</h1>
-    <p class="mb-1 text-sm text-neutral-400">
+    <p class="mb-1 text-sm text-neutral-600 dark:text-neutral-400">
       Click to copy color in {displayMode} form.
     </p>
-    <p class="text-sm text-neutral-400">
-      Example: <span class="rounded bg-neutral-800 px-1 py-0.5 font-mono">
+    <p class="text-sm text-neutral-600 dark:text-neutral-400">
+      Example: <span
+        class="rounded bg-neutral-200 px-1 py-0.5 font-mono text-neutral-700 dark:bg-neutral-800 dark:text-inherit"
+      >
         {#if displayMode === "hex"}
           #00bc7d
         {:else if displayMode === "oklch"}
@@ -51,25 +53,33 @@
   </div>
   <div class="flex h-10 items-stretch gap-x-2 text-sm sm:h-11 sm:text-base">
     <Tabs.Root bind:value={displayMode}>
-      <Tabs.List class="flex gap-2 rounded-lg bg-neutral-800 p-1.5 font-mono font-medium">
-        <Tabs.Trigger
-          value="hex"
-          class="w-16 cursor-pointer rounded py-1 ring-blue-500 transition-transform outline-none hover:bg-neutral-700 focus-visible:ring-2 active:scale-95 data-[state=active]:bg-neutral-300 data-[state=active]:text-neutral-800"
-          >hex
-        </Tabs.Trigger>
-        <Tabs.Trigger
-          value="oklch"
-          class="w-16 cursor-pointer rounded py-1 ring-blue-500 transition-transform outline-none hover:bg-neutral-700 focus-visible:ring-2 active:scale-95 data-[state=active]:bg-neutral-300 data-[state=active]:text-neutral-800"
-        >
-          oklch
-        </Tabs.Trigger>
+      <Tabs.List
+        class="flex gap-2 rounded-lg bg-neutral-200 p-1.5 font-mono font-medium dark:bg-neutral-800"
+      >
+        {#each ["hex", "oklch"] as format (format)}
+          <Tabs.Trigger
+            value={format}
+            class={twMerge(
+              "w-16 cursor-pointer rounded py-1 ring-blue-500 transition-transform outline-none",
+              " hover:bg-neutral-100 focus-visible:ring-2 active:scale-95 dark:hover:bg-neutral-700",
+              "data-[state=active]:bg-neutral-50 data-[state=active]:text-neutral-800",
+              "dark:data-[state=active]:bg-neutral-300 dark:data-[state=active]:text-neutral-800",
+            )}
+          >
+            {format}
+          </Tabs.Trigger>
+        {/each}
       </Tabs.List>
     </Tabs.Root>
     <div
-      class="flex aspect-square h-full items-center justify-center rounded-lg bg-neutral-800 p-1.5"
+      class="flex aspect-square h-full items-center justify-center rounded-lg bg-neutral-200 p-1.5 dark:bg-neutral-800"
     >
       <Toggle.Root
-        class="box-border flex cursor-pointer items-center justify-center rounded ring-blue-500 transition-colors outline-none hover:bg-neutral-600 focus-visible:ring-2 active:scale-95"
+        class={twMerge(
+          "box-border flex cursor-pointer items-center justify-center rounded",
+          "ring-blue-500 transition-colors outline-none",
+          "hover:bg-neutral-100 focus-visible:ring-2 active:scale-95 dark:hover:bg-neutral-600",
+        )}
         bind:pressed={showColorCode}
       >
         <div class="size-auto p-1">

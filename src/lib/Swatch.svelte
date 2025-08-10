@@ -103,7 +103,7 @@
       {/if}
     </div>
     <div class="mt-0.5 flex w-full flex-col items-start justify-center">
-      <span class="text-xs tracking-wide text-neutral-400">{colorId}</span>
+      <span class="text-xs tracking-wide text-neutral-600 dark:text-neutral-400">{colorId}</span>
     </div>
   </button>
 {/if}
