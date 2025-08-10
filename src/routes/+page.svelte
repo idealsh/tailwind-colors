@@ -30,7 +30,12 @@
 
 <svelte:head>
   <title>Tailwind Colors</title>
+  <meta
+    name="description"
+    content="An interface for looking up and copying Tailwind v4 colors in both hex and oklch"
+  />
 </svelte:head>
+
 <header
   class="mx-auto mb-2 flex min-h-32 max-w-4xl flex-col items-start justify-between gap-y-4 px-6 py-10 sm:flex-row sm:items-center"
 >
